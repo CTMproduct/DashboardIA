@@ -1,0 +1,68 @@
+/**
+ * Estilos globales del dashboard
+ */
+
+:root {
+  --primary: #0284c7;
+  --primary-light: #06b6d4;
+  --secondary: #0f172a;
+  --text-dark: #1a202c;
+  --text-light: #475569;
+  --bg-light: #f0f9ff;
+  --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdff 100%);
+  --border-light: rgba(255, 255, 255, 0.6);
+  --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 20px 50px rgba(2, 132, 199, 0.15);
+  --transition: all 0.2s ease;
+}
+
+* {
+  transition: var(--transition);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-dark);
+  background: var(--bg-gradient);
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+/* Mensajes de estado */
+.errorMessage {
+  background-color: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #991b1b;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.successMessage {
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #065f46;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
