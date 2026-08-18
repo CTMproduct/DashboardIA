@@ -48,3 +48,24 @@ export const formatMetric = (value, type = "decimal") => {
       return value.toString();
   }
 };
+
+/**
+ * Formatea el valor de una métrica del dashboard según su tipo declarado
+ * en metricDefinitions (percentage, score5, seconds).
+ * @param {number|null|undefined} value
+ * @param {string} type
+ * @returns {string}
+ */
+export const formatMetricValue = (value, type) => {
+  if (value === null || value === undefined) return "—";
+  switch (type) {
+    case "percentage":
+      return formatToPercentage(value);
+    case "score5":
+      return `${formatToTwoDecimals(value)} / 5`;
+    case "seconds":
+      return formatTimeSeconds(value);
+    default:
+      return formatToTwoDecimals(value);
+  }
+};

@@ -4,3 +4,4 @@
 
 export { useMetrics } from "./useMetrics.js";
 export { useFeedback } from "./useFeedback.js";
+export { useFlaggedInteractions } from "./useFlaggedInteractions.js";

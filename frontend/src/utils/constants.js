@@ -5,67 +5,87 @@
 // API Configuration
 export const API_BASE = import.meta.env.VITE_API_BASE ?? "http://localhost:8000";
 
-// Agent Configuration
-export const agentConfigs = [
-  {
-    icon: "⚡",
-    name: "GPT-4o",
-    tags: ["GPT", "producción"],
-    accent: "#34d399",
-  },
-  {
-    icon: "💎",
-    name: "Gemini 2.5",
-    tags: ["Gemini", "investigación"],
-    accent: "#60a5fa",
-  },
-  {
-    icon: "🔐",
-    name: "Mixtral 8x22",
-    tags: ["Open Source", "local"],
-    accent: "#fb923c",
-  },
-  {
-    icon: "🤖",
-    name: "Hermes 3",
-    tags: ["Open Source", "fine-tuned"],
-    accent: "#f472b6",
-  },
-];
-
-// Score Weights Configuration
-export const scoreWeightConfigs = [
-  ["CSAT", "30%", "Satisfacción directa del cliente (0–100%)", "#5eead4"],
-  ["Precisión", "25%", "Calidad del output del agente (0–100%)", "#93c5fd"],
-  ["Velocidad", "15%", "UX y costo operacional — ms promedio", "#fde047"],
-  ["Completitud", "15%", "% de tareas resueltas sin abandono", "#f9a8d4"],
-  ["Anti-Alucinación", "10%", "% sin alucinaciones", "#fb923c"],
-  ["No-Escalación", "5%", "% sin escalar a humano", "#a78bfa"],
-];
-
-// Initial Feedback Data
-export const initialFeedbackData = {
-  channel: "web",
-  resolved: true,
-  response_time_seconds: 45,
-  customer_sentiment: 0.8,
-  csat_score: 4.2,
-  escalated: false,
-  conversation_turns: 7,
-  metadata: {},
+// Perfil del agente que se está midiendo (Custom GPT de HyperGuest)
+export const agentProfile = {
+  icon: "📈",
+  name: "NORA",
+  fullName: "Net Optimization & Revenue Assistant",
+  tags: ["HyperGuest", "Revenue Management", "Custom GPT"],
 };
 
-// Filter Options
-export const filterOptions = [
-  { label: "Todos", count: agentConfigs.length },
-  { label: "⚡ GPT", count: 1 },
-  { label: "💎 Gemini", count: 1 },
-  { label: "🔐 Open Source", count: 2 },
+// Definición de métricas reales calculadas por el backend a partir de Supabase
+// [key, título, descripción, color, tipo de formato]
+export const metricDefinitions = [
+  [
+    "hallucination_rate",
+    "Posibles alucinaciones",
+    "% de respuestas que el hotel marcó como información incorrecta o inventada",
+    "#fb923c",
+    "percentage",
+  ],
+  [
+    "escalation_rate",
+    "Asistencia humana (HyperGuest)",
+    "% de conversaciones que el agente escaló a una persona de HyperGuest",
+    "#a78bfa",
+    "percentage",
+  ],
+  [
+    "resolution_rate",
+    "Resueltas sin escalar",
+    "% de conversaciones que terminaron resueltas por el agente sin intervención humana",
+    "#5eead4",
+    "percentage",
+  ],
+  [
+    "positive_rate",
+    "Feedback positivo",
+    "% de respuestas que el hotel marcó explícitamente como útiles",
+    "#34d399",
+    "percentage",
+  ],
+  [
+    "avg_csat",
+    "CSAT promedio",
+    "Satisfacción reportada por los hoteles en una escala de 1 a 5",
+    "#93c5fd",
+    "score5",
+  ],
+  [
+    "avg_response_time_seconds",
+    "Tiempo de respuesta",
+    "Promedio en segundos hasta que el agente responde",
+    "#fde047",
+    "seconds",
+  ],
 ];
 
-// Tab Options
-export const tabOptions = [
-  { id: "agents", label: "📄 Agentes", active: true },
-  { id: "comparison", label: "📈 Comparativa", active: false },
-  { id: "deploy", label: "🚀 Deploy", active: false },
+// Opciones de categoría de feedback (coinciden con el check constraint de Supabase)
+export const feedbackCategoryOptions = [
+  ["accurate_helpful", "✅ Correcta y útil"],
+  ["hallucination", "⚠️ Alucinación / info incorrecta"],
+  ["incomplete", "🟡 Incompleta"],
+  ["irrelevant", "❌ No entendió la pregunta"],
+  ["needs_human", "🙋 Pidió persona (HyperGuest)"],
+  ["other", "Otro"],
 ];
+
+// Datos iniciales del formulario de prueba (API Tester)
+export const initialFeedbackData = {
+  hotel_id: "",
+  hotel_name: "",
+  conversation_id: "",
+  channel: "chatgpt_custom_gpt",
+  user_question: "",
+  agent_response: "",
+  feedback_rating: "positive",
+  feedback_category: "accurate_helpful",
+  feedback_comment: "",
+  escalated_to_human: false,
+  escalation_target: "",
+  escalation_reason: "",
+  resolved: true,
+  response_time_seconds: 12,
+  csat_score: 4.5,
+  metadata: {},
+};

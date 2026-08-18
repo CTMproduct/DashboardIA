@@ -3,17 +3,18 @@
  */
 
 :root {
-  --primary: #0284c7;
-  --primary-light: #06b6d4;
-  --secondary: #0f172a;
-  --text-dark: #1a202c;
-  --text-light: #475569;
-  --bg-light: #f0f9ff;
-  --bg-gradient: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdff 100%);
+  /* Paleta corporativa HyperGuest */
+  --primary: #2e9e5c;
+  --primary-light: #4cb876;
+  --secondary: #163325;
+  --text-dark: #1a2620;
+  --text-light: #4d6357;
+  --bg-light: #effbf3;
+  --bg-gradient: linear-gradient(135deg, #effbf3 0%, #e3f6e9 50%, #f2fbf5 100%);
   --border-light: rgba(255, 255, 255, 0.6);
   --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 20px 50px rgba(2, 132, 199, 0.15);
+  --shadow-lg: 0 20px 50px rgba(46, 158, 92, 0.15);
   --transition: all 0.2s ease;
 }
 
@@ -49,20 +50,20 @@ input[type="range"] {
 /* Mensajes de estado */
 .errorMessage {
   background-color: rgba(220, 38, 38, 0.1);
-  border: 1px solid rgba(220, 38, 38, 0.3);
+  border: 1.5px solid rgba(220, 38, 38, 0.3);
   color: #991b1b;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
 }
 
 .successMessage {
-  background-color: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #065f46;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+  background-color: rgba(46, 158, 92, 0.12);
+  border: 1.5px solid rgba(46, 158, 92, 0.35);
+  color: #1c6b3f;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
 }

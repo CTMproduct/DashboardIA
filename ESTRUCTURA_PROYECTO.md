@@ -6,16 +6,19 @@
 frontend/
 ├── src/
 │   ├── components/                 # Componentes reutilizables
-│   │   ├── AgentCard/
-│   │   │   ├── AgentCard.jsx       # Componente presentacional
-│   │   │   └── index.js            # Exportador
 │   │   ├── MetricBox/
 │   │   │   ├── MetricBox.jsx
 │   │   │   └── index.js
-│   │   ├── ScoreWeights/
-│   │   │   ├── ScoreWeights.jsx
+│   │   ├── MetricsGrid/             # Grid de métricas reales (alucinaciones, HyperGuest, CSAT...)
+│   │   │   ├── MetricsGrid.jsx
 │   │   │   └── index.js
-│   │   └── APITester/
+│   │   ├── FlaggedTable/            # Casos marcados como alucinación, para revisión
+│   │   │   ├── FlaggedTable.jsx
+│   │   │   └── index.js
+│   │   ├── HotelBreakdown/          # Desglose de métricas por hotel
+│   │   │   ├── HotelBreakdown.jsx
+│   │   │   └── index.js
+│   │   └── APITester/               # Simulador de feedback para pruebas
 │   │       ├── APITester.jsx
 │   │       └── index.js
 │   │
@@ -25,9 +28,10 @@ frontend/
 │   │       └── index.js
 │   │
 │   ├── hooks/                      # Custom Hooks
-│   │   ├── useMetrics.js           # Gestiona métricas
-│   │   ├── useFeedback.js          # Gestiona estado de feedback
-│   │   └── index.js                # Exportador centralizado
+│   │   ├── useMetrics.js               # Métricas globales + SSE en tiempo real
+│   │   ├── useFeedback.js              # Estado del formulario de prueba
+│   │   ├── useFlaggedInteractions.js   # Casos marcados + desglose por hotel
+│   │   └── index.js                    # Exportador centralizado
 │   │
 │   ├── utils/                      # Utilidades
 │   │   ├── constants.js            # Constantes y configuración

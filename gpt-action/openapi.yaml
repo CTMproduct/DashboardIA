@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: Registro de feedback — NORA (HyperGuest)
+  description: >
+    Acción para que el Custom GPT registre, después de cada respuesta relevante
+    a un hotel, si esa respuesta fue correcta, si el hotel la marcó como una
+    posible alucinación, o si tuvo que escalarse a una persona de HyperGuest.
+  version: "1.0.0"
+servers:
+  - url: https://TU-DOMINIO.up.railway.app
+    description: Backend en Railway (reemplaza por la URL real del deploy)
+paths:
+  /interactions/feedback:
+    post:
+      operationId: registrarFeedbackHotel
+      summary: Registra una interacción hotel-agente y su feedback
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AgentInteraction"
+      responses:
+        "200":
+          description: Feedback registrado correctamente
+        "401":
+          description: X-API-Key inválida o ausente
+        "502":
+          description: No se pudo persistir el feedback (reintentar más tarde)
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    AgentInteraction:
+      type: object
+      required:
+        - user_question
+        - agent_response
+      properties:
+        hotel_id:
+          type: string
+          nullable: true
+          description: Identificador estable del hotel si se conoce (ej. código PMS)
+        hotel_name:
+          type: string
+          nullable: true
+          description: Nombre del hotel tal como lo mencionó en la conversación
+        conversation_id:
+          type: string
+          nullable: true
+          description: Identificador de la conversación actual, para agrupar turnos
+        channel:
+          type: string
+          default: chatgpt_custom_gpt
+        user_question:
+          type: string
+          description: Pregunta o mensaje del hotel
+        agent_response:
+          type: string
+          description: Respuesta que dio el agente
+        feedback_rating:
+          type: string
+          enum: [positive, negative, neutral]
+          nullable: true
+          description: Cómo reaccionó el hotel a la respuesta, si lo expresó explícitamente
+        feedback_category:
+          type: string
+          enum:
+            - accurate_helpful
+            - hallucination
+            - incomplete
+            - irrelevant
+            - needs_human
+            - other
+          nullable: true
+          description: >
+            Clasificación de la respuesta. Usa "hallucination" SOLO cuando el hotel
+            indicó explícitamente que la información era incorrecta o inventada.
+        feedback_comment:
+          type: string
+          nullable: true
+        escalated_to_human:
+          type: boolean
+          default: false
+          description: true si la conversación se derivó a una persona
+        escalation_target:
+          type: string
+          nullable: true
+          description: A quién se escaló, por ejemplo "hyperguest"
+        escalation_reason:
+          type: string
+          nullable: true
+        resolved:
+          type: boolean
+          nullable: true
+          description: true si la conversación terminó resuelta sin escalar
+        response_time_seconds:
+          type: number
+          nullable: true
+        csat_score:
+          type: number
+          nullable: true
+          description: 1 a 5, solo si el hotel calificó explícitamente
+        metadata:
+          type: object
+          additionalProperties: true

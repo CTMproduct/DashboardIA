@@ -3,138 +3,78 @@
  * Componente principal que orquesta todos los componentes
  */
 
-import React, { useMemo } from "react";
-import { useMetrics, useFeedback } from "../../hooks/index.js";
-import AgentCard from "../../components/AgentCard/index.js";
+import React from "react";
+import { useMetrics, useFeedback, useFlaggedInteractions } from "../../hooks/index.js";
 import MetricBox from "../../components/MetricBox/index.js";
-import ScoreWeights from "../../components/ScoreWeights/index.js";
+import MetricsGrid from "../../components/MetricsGrid/index.js";
+import FlaggedTable from "../../components/FlaggedTable/index.js";
+import HotelBreakdown from "../../components/HotelBreakdown/index.js";
 import APITester from "../../components/APITester/index.js";
-import {
-  agentConfigs,
-  scoreWeightConfigs,
-  filterOptions,
-  tabOptions,
-} from "../../utils/constants.js";
+import { agentProfile, metricDefinitions } from "../../utils/constants.js";
 import { formatToPercentage } from "../../utils/formatting.js";
 
 const Dashboard = () => {
   const { metrics, isFlashing } = useMetrics();
+  const { flagged, byHotel, isLoading: isFlaggedLoading } = useFlaggedInteractions();
   const {
     feedbackData,
+    apiKey,
     updateFeedbackField,
+    updateApiKey,
     handleSubmitFeedback,
     isSubmitting,
     submitError,
     submitSuccess,
   } = useFeedback();
 
-  // Calcular contadores
-  const counters = useMemo(() => {
-    const totalInteractions = metrics?.total_interactions ?? 0;
-    const evaluatedCount = Math.max(
-      0,
-      Math.round(totalInteractions * (metrics?.resolution_rate ?? 0))
-    );
-
-    return {
-      agentsCount: agentConfigs.length,
-      evaluatedCount,
-      resolutionRate: formatToPercentage(metrics?.resolution_rate ?? 0),
-      escalationRate: formatToPercentage(metrics?.escalation_rate ?? 0),
-    };
-  }, [metrics]);
-
-  const handleTabClick = (tabId) => {
-    console.log(`Tab clicked: ${tabId}`);
-    // TODO: Implementar navegación entre tabs
-  };
-
-  const handleFilterClick = (filterIndex) => {
-    console.log(`Filter clicked: ${filterIndex}`);
-    // TODO: Implementar filtrado
-  };
-
-  const handleAddAgent = () => {
-    console.log("Add agent clicked");
-    // TODO: Implementar agregar agente
-  };
-
-  const handleEvaluateAgent = (agentName) => {
-    console.log(`Evaluate agent: ${agentName}`);
-    // TODO: Implementar evaluar agente
-  };
-
   return (
     <main className="dashboardRoot">
       {/* Header/Hero */}
       <header className="hero">
         <div>
-          <p className="eyebrow">ENTERPRISE AI EVAL • 2025–2026</p>
-          <h1>Agent Performance Dashboard</h1>
-
-          {/* Tabs */}
-          <div className="tabs">
-            {tabOptions.map((tab) => (
-              <button
-                key={tab.id}
-                className={`tab ${tab.active ? "active" : ""}`}
-                type="button"
-                onClick={() => handleTabClick(tab.id)}
-              >
-                {tab.label}
-              </button>
+          <p className="eyebrow">HYPERGUEST · MONITOREO DEL AGENTE IA</p>
+          <h1>
+            {agentProfile.icon} {agentProfile.name}
+          </h1>
+          <p className="agentFullName">{agentProfile.fullName}</p>
+          <div className="chipRow">
+            {agentProfile.tags.map((tag) => (
+              <span key={tag} className="chip">
+                {tag}
+              </span>
             ))}
           </div>
         </div>
 
         {/* Stats Group */}
-        <div className="statGroup">
-          <MetricBox value={counters.agentsCount} label="agentes" />
-          <MetricBox value={counters.evaluatedCount} label="evaluados" />
-          <button
-            className="addAgent"
-            type="button"
-            onClick={handleAddAgent}
-            title="Agregar nuevo agente"
-          >
-            + Agente
-          </button>
+        <div className={`statGroup ${isFlashing ? "flash" : ""}`}>
+          <MetricBox value={metrics?.total_interactions ?? 0} label="interacciones" />
+          <MetricBox
+            value={formatToPercentage(metrics?.hallucination_rate ?? 0)}
+            label="alucinaciones"
+          />
+          <MetricBox
+            value={formatToPercentage(metrics?.escalation_rate ?? 0)}
+            label="a HyperGuest"
+          />
         </div>
       </header>
 
-      {/* Filters */}
-      <section className="filters">
-        {filterOptions.map((filter, index) => (
-          <button
-            key={index}
-            className={`filter ${index === 0 ? "active" : ""}`}
-            type="button"
-            onClick={() => handleFilterClick(index)}
-          >
-            {filter.label} ({filter.count})
-          </button>
-        ))}
-      </section>
+      {/* Métricas reales */}
+      <MetricsGrid definitions={metricDefinitions} metrics={metrics} />
 
-      {/* Agent Grid */}
-      <section className="agentGrid">
-        {agentConfigs.map((agent) => (
-          <AgentCard
-            key={agent.name}
-            {...agent}
-            isFlashing={isFlashing}
-            onEvaluate={() => handleEvaluateAgent(agent.name)}
-          />
-        ))}
-      </section>
+      {/* Casos marcados como alucinación, para revisión humana */}
+      <FlaggedTable items={flagged} isLoading={isFlaggedLoading} />
 
-      {/* Score Weights */}
-      <ScoreWeights weights={scoreWeightConfigs} />
+      {/* Desglose por hotel */}
+      <HotelBreakdown items={byHotel} isLoading={isFlaggedLoading} />
 
-      {/* API Tester */}
+      {/* Simulador de feedback para pruebas */}
       <APITester
         feedbackData={feedbackData}
+        apiKey={apiKey}
         onFieldChange={updateFeedbackField}
+        onApiKeyChange={updateApiKey}
         onSubmit={handleSubmitFeedback}
         isSubmitting={isSubmitting}
         submitError={submitError}
